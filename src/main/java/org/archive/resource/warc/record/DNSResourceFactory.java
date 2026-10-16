@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.archive.RecoverableRecordFormatException;
+import org.archive.format.dns.DNSParseException;
 import org.archive.format.dns.DNSResponse;
 import org.archive.format.dns.DNSResponseParser;
 import org.archive.resource.MetaData;
-import org.archive.resource.ResourceConstants;
 import org.archive.resource.Resource;
+import org.archive.resource.ResourceConstants;
 import org.archive.resource.ResourceContainer;
 import org.archive.resource.ResourceFactory;
 import org.archive.resource.ResourceParseException;
@@ -23,6 +24,8 @@ public class DNSResourceFactory implements ResourceFactory, ResourceConstants {
 		DNSResponse response = new DNSResponse();
 		try {
 			parser.parse(is, response);
+        } catch (DNSParseException e) {
+            // rja, 2026-10-16 added to enable CDX creation for broken DNS records
 		} catch(RecoverableRecordFormatException e) {
 			throw new ResourceParseException(e);
 		}
